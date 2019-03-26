@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout layoutMenu;
     private TextView tvTitle;
     private SearchView search;
+    private SparseArray<String> titleArry=new SparseArray<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setTitleMenu() {
+        titleArry.put(R.id.bar_see_cinema,"影院列表");
+        titleArry.put(R.id.bar_add_cinema,"添加影院");
+        titleArry.put(R.id.bar_add_order,"添加订单");
+        titleArry.put(R.id.bar_order,"订单列表");
         layoutMenu = findViewById(R.id.bar_menu);
         layoutMenu.setVisibility(View.GONE);
         findViewById(R.id.bar_img_menu).setOnClickListener(v -> {
@@ -53,9 +59,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         layoutMenu.setVisibility(View.GONE);
+        tvTitle.setText(titleArry.get(v.getId()));
         switch (v.getId()) {
             case R.id.bar_order:
-                tvTitle.setText("我的订单");
                 manager.beginTransaction().replace(R.id.fragment_container,
                         new OrderFragment())
                         .commit();
@@ -63,10 +69,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.bar_add_order:
                 break;
             case R.id.bar_add_cinema:
-                finish();
                 break;
             case R.id.bar_see_cinema:
-                tvTitle.setText("影院列表");
                 manager.beginTransaction().replace(R.id.fragment_container,
                         new CinemasFragment())
                         .commit();
