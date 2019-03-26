@@ -32,7 +32,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setTitleMenu() {
         layoutMenu = findViewById(R.id.bar_menu);
         layoutMenu.setVisibility(View.GONE);
-        findViewById(R.id.bar_img_menu).setOnClickListener(this);
+        findViewById(R.id.bar_img_menu).setOnClickListener(v -> {
+            int visible = layoutMenu.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
+            layoutMenu.setVisibility(visible);
+        });
         tvTitle = findViewById(R.id.bar_title_tv_title);
         tvTitle.setText("我的订单");
         search = findViewById(R.id.bar_searchView);
@@ -40,24 +43,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.bar_add_cinema).setOnClickListener(this);
         findViewById(R.id.bar_add_order).setOnClickListener(this);
         findViewById(R.id.bar_see_cinema).setOnClickListener(this);
-        findViewById(R.id.bar_exit).setOnClickListener(this);
+        findViewById(R.id.bar_exit).setOnClickListener(v -> System.exit(0));
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bar_img_menu:
-                int visible = layoutMenu.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
-                layoutMenu.setVisibility(visible);
-                break;
             case R.id.bar_order:
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
                 break;
             case R.id.bar_add_order:
                 break;
-            case R.id.bar_exit:
-                System.exit(0);
+            case R.id.bar_add_cinema:
+                finish();
+                break;
+            case R.id.bar_see_cinema:
                 break;
             default:
                 break;
