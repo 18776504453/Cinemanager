@@ -1,6 +1,7 @@
 package net.lzzy.cinemanager.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,12 +12,15 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import net.lzzy.cinemanager.R;
+import net.lzzy.cinemanager.frament.CinemasFragment;
+import net.lzzy.cinemanager.frament.OrderFragment;
 
 /**
  * @author Administrator
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private FragmentManager manager = getSupportFragmentManager();
     private LinearLayout layoutMenu;
     private TextView tvTitle;
     private SearchView search;
@@ -48,10 +52,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        layoutMenu.setVisibility(View.GONE);
         switch (v.getId()) {
             case R.id.bar_order:
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
+                tvTitle.setText("我的订单");
+                manager.beginTransaction().replace(R.id.fragment_container,
+                        new OrderFragment())
+                        .commit();
                 break;
             case R.id.bar_add_order:
                 break;
@@ -59,6 +66,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.bar_see_cinema:
+                tvTitle.setText("影院列表");
+                manager.beginTransaction().replace(R.id.fragment_container,
+                        new CinemasFragment())
+                        .commit();
                 break;
             default:
                 break;
