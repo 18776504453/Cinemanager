@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,17 +14,17 @@ import net.lzzy.cinemanager.R;
 /**
  *
  * @author lzzy_gxy
- * @date 2019/3/26
+ * @date 2019/3/27
  * Description:
  */
-public class OrderFragment extends Fragment {
-    public OrderFragment(){}
+public class AddCinemasFragment extends Fragment {
+    public AddCinemasFragment(){}
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_orders,null);
-        EditText editText=view.findViewById(R.id.fragment_edt);
-        return view;
+        View view= inflater.inflate(R.layout.add_fragment_cinemas,null);
+        return  view;
+
     }
 }

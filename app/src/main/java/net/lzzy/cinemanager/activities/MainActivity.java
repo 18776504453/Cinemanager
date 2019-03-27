@@ -1,9 +1,10 @@
 package net.lzzy.cinemanager.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.View;
@@ -25,7 +26,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout layoutMenu;
     private TextView tvTitle;
     private SearchView search;
-    private SparseArray<String> titleArry=new SparseArray<>();
+    private SparseArray<String> titleArray =new SparseArray<>();
+    private SparseArray<Fragment> fragmentArray =new SparseArray<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +38,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setTitleMenu() {
-        titleArry.put(R.id.bar_see_cinema,"影院列表");
-        titleArry.put(R.id.bar_add_cinema,"添加影院");
-        titleArry.put(R.id.bar_add_order,"添加订单");
-        titleArry.put(R.id.bar_order,"订单列表");
+        titleArray.put(R.id.bar_see_cinema,"影院列表");
+        titleArray.put(R.id.bar_add_cinema,"添加影院");
+        titleArray.put(R.id.bar_add_order,"添加订单");
+        titleArray.put(R.id.bar_order,"订单列表");
         layoutMenu = findViewById(R.id.bar_menu);
         layoutMenu.setVisibility(View.GONE);
         findViewById(R.id.bar_img_menu).setOnClickListener(v -> {
@@ -59,8 +61,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         layoutMenu.setVisibility(View.GONE);
-        tvTitle.setText(titleArry.get(v.getId()));
-        switch (v.getId()) {
+        tvTitle.setText(titleArray.get(v.getId()));
+        FragmentTransaction transaction=manager.beginTransaction();
+        Fragment fragment= fragmentArray.get(v.getId());
+        if (fragment==null){
+            fragment=createFragment(v.getId());
+            fragmentArray.put(v.getId(),fragment);
+            transaction.add(R.id.fragment_container,fragment);
+        }
+        for (Fragment f:manager.getFragments()){
+            transaction.hide(f);
+        }
+        transaction.show(fragment).commit();
+        //region
+/*        switch (v.getId()) {
             case R.id.bar_order:
                 manager.beginTransaction().replace(R.id.fragment_container,
                         new OrderFragment())
@@ -77,6 +91,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             default:
                 break;
+        }*/
+       //endregion
+    }
+
+    private Fragment createFragment(int id) {
+        switch (id) {
+            case R.id.bar_order:
+                return new OrderFragment();
+            case R.id.bar_add_order:
+                break;
+            case R.id.bar_add_cinema:
+                break;
+            case R.id.bar_see_cinema:
+
+                return new CinemasFragment();
+            default:
+                break;
         }
+        return null;
     }
 }
