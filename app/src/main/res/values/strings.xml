@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Cinemanager</string>
-    <string name="my_order">我的订单</string>
-    <string name="searchView_content">请输入搜索内容</string>
-    <string name="add_order">添加订单</string>
-    <string name="add_cinema">添加影院</string>
-    <string name="exit">退出</string>
-    <string name="see_cinema">查看影院</string>
+    <string name="my_order">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;我的订单&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</string>
+    <string name="searchView_content">请输入搜索内容&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</string>
+    <string name="add_order">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;添加订单&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</string>
+    <string name="add_cinema">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;添加影院&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</string>
+    <string name="exit">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;退出EXIT&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</string>
+    <string name="see_cinema">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;查看影院&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</string>
 </resources>
