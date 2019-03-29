@@ -3,12 +3,14 @@ package net.lzzy.cinemanager.frament;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import net.lzzy.cinemanager.R;
 import net.lzzy.cinemanager.models.Cinema;
 import net.lzzy.cinemanager.models.CinemaFactory;
 import net.lzzy.sqllib.GenericAdapter;
 import net.lzzy.sqllib.ViewHolder;
 
+import java.security.PublicKey;
 import java.util.List;
 
 /**
@@ -20,15 +22,24 @@ public class CinemasFragment extends BaseFragment {
     private List<Cinema> cinemas;
     private CinemaFactory factory;
     private GenericAdapter<Cinema> adapter;
+    private Cinema cinema;
+
+    public CinemasFragment() {
+    }
+
+    public CinemasFragment(Cinema cinema) {
+        this.cinema = cinema;
+    }
 
     @Override
     protected void populate() {
-        ListView lv=findViewById(R.id.activity_cinema_content_lv);
-        View empty=findViewById(R.id.item_zero);
+
+        ListView lv = findViewById(R.id.activity_cinema_content_lv);
+        View empty = findViewById(R.id.item_zero);
         lv.setEmptyView(empty);
-        factory=CinemaFactory.getInstance();
-        cinemas=factory.get();
-        adapter=new GenericAdapter<Cinema>(getActivity(),R.layout.cinema_item,cinemas) {
+        factory = CinemaFactory.getInstance();
+        cinemas = factory.get();
+        adapter = new GenericAdapter<Cinema>(getActivity(), R.layout.cinema_item, cinemas) {
             @Override
             public void populate(ViewHolder holder, Cinema cinema) {
                 holder.setTextView(R.id.activity_cinema_item_name, cinema.getName())
@@ -46,11 +57,18 @@ public class CinemasFragment extends BaseFragment {
             }
         };
         lv.setAdapter(adapter);
+        if (cinema!=null){
+            save(cinema);
+        }
 
     }
 
     @Override
     public int getLayout() {
         return R.layout.fragment_cinemas;
+    }
+
+    public void save(Cinema cinema) {
+        adapter.add(cinema);
     }
 }

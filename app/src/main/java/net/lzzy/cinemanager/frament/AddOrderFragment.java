@@ -1,6 +1,7 @@
 package net.lzzy.cinemanager.frament;
 
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.TextUtils;
@@ -44,10 +45,21 @@ public class AddOrderFragment extends BaseFragment {
     private Button btn;
     private List<Cinema>cinemas;
     public CustomDatePicker datePicker;
+    private OnFragmentInteractionListener listener;
 
     @Override
     protected void populate() {
+        listener.hidSearch();
         initView();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
+            listener.hidSearch();
+        }
+
     }
 
     private void initView() {
@@ -101,10 +113,7 @@ public class AddOrderFragment extends BaseFragment {
                 return;
             }
             Cinema cinema = cinemas.get(spCinema.getSelectedItemPosition());
-
-
             try {
-
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 Toast.makeText(getActivity(), "请添加影院信息", Toast.LENGTH_SHORT).show();
@@ -114,11 +123,8 @@ public class AddOrderFragment extends BaseFragment {
             order.setMovie(movie);
             order.setMovieTime(time);
             order.setPrice(price);
-
             order.setCinemaId(cinema.getId());
             //adapter.add(order);
-            edtMovie.setText("");
-            edtPrice.setText("");
         });
         findViewById(R.id.order_dialog_btn_er).setOnClickListener(v -> {
             String name = edtMovie.getText().toString();
@@ -144,4 +150,20 @@ public class AddOrderFragment extends BaseFragment {
     public int getLayout() {
         return R.layout.add_fragment_orders;
     }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try{
+            listener= (OnFragmentInteractionListener) context;
+        }catch (ClassCastException e){
+            throw  new ClassCastException(context.toString()+"必需实现OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener=null;
+    }
+
 }

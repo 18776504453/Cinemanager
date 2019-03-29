@@ -1,8 +1,8 @@
 package net.lzzy.cinemanager.frament;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,18 +29,32 @@ public class AddCinemasFragment extends BaseFragment {
     private String city = "柳州市";
     private String province = "广西壮族自治区";
     private String area = "鱼峰区";
+    private OnFragmentInteractionListener listener;
+    private OnCinemaCreatedListener cinemaListener;
+    //声明对象
 
     @Override
     protected void populate() {
+        listener.hidSearch();
         initView();
         showDialog();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            listener.hidSearch();
+        }
+
     }
 
     private void initView() {
         tvArea = findViewById(R.id.activity_dialog_location);
         editText = findViewById(R.id.activity_dialog_edt_name);
     }
-    public void showDialog() {
+
+    private void showDialog() {
 
         findViewById(R.id.activity_cinema_content_layoutArea).setOnClickListener(v -> {
             JDCityPicker cityPicker = new JDCityPicker();
@@ -55,6 +69,7 @@ public class AddCinemasFragment extends BaseFragment {
                     String loc = province.getName() + city.getName() + district.getName();
                     tvArea.setText(loc);
                 }
+
                 @Override
                 public void onCancel() {
                 }
@@ -73,9 +88,11 @@ public class AddCinemasFragment extends BaseFragment {
             cinema.setArea(area);
             cinema.setProvince(province);
             cinema.setLocation(tvArea.getText().toString());
+            cinemaListener.saveCinema(cinema);
 
         });
         findViewById(R.id.activity_dialog_cancel).setOnClickListener(v -> {
+            listener.hidSearch();
 
         });
     }
@@ -84,4 +101,42 @@ public class AddCinemasFragment extends BaseFragment {
     public int getLayout() {
         return R.layout.add_fragment_cinemas;
     }
+
+    /**
+     * @param context=MainActivity 附加填充到activity
+     *                             初始化
+     */
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            cinemaListener = (OnCinemaCreatedListener) context;
+            listener = (OnFragmentInteractionListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + "必需实现OnFragmentInteractionListener");
+        }
+    }
+
+    /**
+     * 销毁
+     */
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
+        cinemaListener = null;
+    }
+
+    public interface OnCinemaCreatedListener {
+        /**
+         *点击取消保存
+         */
+        void cancelAddCinema();
+        /**
+         *点击保存
+         */
+        void saveCinema(Cinema cinema);
+    }
+
 }
