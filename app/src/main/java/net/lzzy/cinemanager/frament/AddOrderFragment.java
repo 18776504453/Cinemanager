@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- *
  * @author lzzy_gxy
  * @date 2019/3/27
  * Description:
@@ -43,9 +42,10 @@ public class AddOrderFragment extends BaseFragment {
     private Spinner spCinema;
     private ImageView imgQRcode;
     private Button btn;
-    private List<Cinema>cinemas;
+    private List<Cinema> cinemas;
     public CustomDatePicker datePicker;
     private OnFragmentInteractionListener listener;
+    private OnOrderCreatedListener orderListener;
 
     @Override
     protected void populate() {
@@ -56,10 +56,11 @@ public class AddOrderFragment extends BaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden){
+        if (!hidden) {
             listener.hidSearch();
         }
-
+        cinemas.clear();
+        cinemas.addAll(CinemaFactory.getInstance().get());
     }
 
     private void initView() {
@@ -76,6 +77,7 @@ public class AddOrderFragment extends BaseFragment {
         Dialog();
 
     }
+
     private void initDatePicker() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
         String now = sdf.format(new Date());
@@ -88,13 +90,14 @@ public class AddOrderFragment extends BaseFragment {
         datePicker.showSpecificTime(true);
         datePicker.setIsLoop(true);
     }
+
     private void Dialog() {
         cinemas = CinemaFactory.getInstance().get();
         spCinema.setAdapter(new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, cinemas));
 
         findViewById(R.id.order_dialog_btn_3).setOnClickListener(v -> {
-
+            orderListener.cancelAddOrder();
         });
         findViewById(R.id.order_dialog_btn_ok).setOnClickListener(v -> {
             Order order = new Order();
@@ -112,26 +115,26 @@ public class AddOrderFragment extends BaseFragment {
                 Toast.makeText(getActivity(), "数字格式不正确", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Cinema cinema = cinemas.get(spCinema.getSelectedItemPosition());
-            try {
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                Toast.makeText(getActivity(), "请添加影院信息", Toast.LENGTH_SHORT).show();
-                return;
-            }
+            if (cinemas.size()!=0){
+                Cinema cinema = cinemas.get(spCinema.getSelectedItemPosition());
+                order.setMovie(movie);
+                order.setMovieTime(time);
+                order.setPrice(price);
+                order.setCinemaId(cinema.getId());
+                orderListener.saveOrder(order);
+                edtMovie.setText("");
+                edtPrice.setText("");
+            }else {
+                Toast.makeText(getActivity(), "请添加影院", Toast.LENGTH_SHORT).show();
 
-            order.setMovie(movie);
-            order.setMovieTime(time);
-            order.setPrice(price);
-            order.setCinemaId(cinema.getId());
-            //adapter.add(order);
+            }
         });
         findViewById(R.id.order_dialog_btn_er).setOnClickListener(v -> {
             String name = edtMovie.getText().toString();
             String price = edtPrice.getText().toString();
             String location = spCinema.getSelectedItem().toString();
             String time = tvTime.getText().toString();
-            if (TextUtils.isEmpty(name) || TextUtils.isEmpty(price)) {
+            if (TextUtils.isEmpty(name) || TextUtils.isEmpty(price) || TextUtils.isEmpty(location) || TextUtils.isEmpty(time)) {
                 Toast.makeText(getActivity(), "信息不全", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -146,24 +149,45 @@ public class AddOrderFragment extends BaseFragment {
 
 
     }
+
     @Override
     public int getLayout() {
         return R.layout.add_fragment_orders;
     }
+
+    @Override
+    public void search(String kw) {
+
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try{
-            listener= (OnFragmentInteractionListener) context;
-        }catch (ClassCastException e){
-            throw  new ClassCastException(context.toString()+"必需实现OnFragmentInteractionListener");
+        try {
+            orderListener = (OnOrderCreatedListener) context;
+            listener = (OnFragmentInteractionListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + "必需实现OnFragmentInteractionListener");
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        listener=null;
+        listener = null;
+        orderListener = null;
+    }
+
+    public interface OnOrderCreatedListener {
+        /**
+         * 点击取消保存
+         */
+        void cancelAddOrder();
+
+        /**
+         * 点击保存
+         */
+        void saveOrder(Order order);
     }
 
 }

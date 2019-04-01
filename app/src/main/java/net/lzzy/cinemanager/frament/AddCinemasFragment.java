@@ -14,7 +14,6 @@ import com.lljjcoder.style.cityjd.JDCityPicker;
 
 import net.lzzy.cinemanager.R;
 import net.lzzy.cinemanager.models.Cinema;
-import net.lzzy.sqllib.GenericAdapter;
 
 /**
  * @author lzzy_gxy
@@ -25,7 +24,6 @@ public class AddCinemasFragment extends BaseFragment {
 
     private TextView tvArea;
     private EditText editText;
-    private GenericAdapter<Cinema> adapter;
     private String city = "柳州市";
     private String province = "广西壮族自治区";
     private String area = "鱼峰区";
@@ -89,10 +87,12 @@ public class AddCinemasFragment extends BaseFragment {
             cinema.setProvince(province);
             cinema.setLocation(tvArea.getText().toString());
             cinemaListener.saveCinema(cinema);
+            editText.setText("");
+            tvArea.setText("");
 
         });
         findViewById(R.id.activity_dialog_cancel).setOnClickListener(v -> {
-            listener.hidSearch();
+            cinemaListener.cancelAddCinema();
 
         });
     }
@@ -100,6 +100,11 @@ public class AddCinemasFragment extends BaseFragment {
     @Override
     public int getLayout() {
         return R.layout.add_fragment_cinemas;
+    }
+
+    @Override
+    public void search(String kw) {
+
     }
 
     /**
