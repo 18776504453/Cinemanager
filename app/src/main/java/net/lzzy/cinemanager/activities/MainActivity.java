@@ -5,11 +5,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.Window;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -29,7 +29,7 @@ import net.lzzy.cinemanager.utils.ViewUtils;
  * @author Administrator
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
-        , OnFragmentInteractionListener, AddCinemasFragment.OnCinemaCreatedListener,AddOrderFragment.OnOrderCreatedListener {
+        , OnFragmentInteractionListener, AddCinemasFragment.OnCinemaCreatedListener,AddOrderFragment.OnOrderCreatedListener , CinemasFragment.OnCinemaSelectedListener {
 
     private FragmentManager manager = getSupportFragmentManager();
     private LinearLayout layoutMenu;
@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SearchView search;
     private SparseArray<String> titleArray = new SparseArray<>();
     private SparseArray<Fragment> fragmentArray = new SparseArray<>();
+    public static final String STATION_ID = "cinemaId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,9 +131,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.bar_see_cinema:
                 return new CinemasFragment();
             default:
-                break;
+                return new OrderFragment();
         }
-        return null;
+
     }
 
     @Override
@@ -211,5 +212,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         transaction.hide(addOrders).show(ordersFragment).commit();
         tvTitle.setText(titleArray.get(R.id.bar_order));
+    }
+
+
+    @Override
+    public void onCinemaSelected(String cinemaId) {
+        Intent intent = new Intent(MainActivity.this, CinemaOrdersActivity.class);
+        intent.putExtra(STATION_ID, cinemaId);
+        startActivity(intent);
     }
 }

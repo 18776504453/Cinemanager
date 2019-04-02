@@ -77,15 +77,16 @@ public class AddCinemasFragment extends BaseFragment {
         findViewById(R.id.activity_dialog_save).setOnClickListener(v -> {
             Cinema cinema = new Cinema();
             String name = editText.getText().toString();
-            if (TextUtils.isEmpty(name)) {
-                Toast.makeText(getActivity(), "请输入影院名称", Toast.LENGTH_SHORT).show();
+            String location=tvArea.getText().toString();
+            if (TextUtils.isEmpty(name)||TextUtils.isEmpty(location)) {
+                Toast.makeText(getActivity(), "请输入影院信息", Toast.LENGTH_SHORT).show();
                 return;
             }
             cinema.setCity(city);
             cinema.setName(name);
             cinema.setArea(area);
             cinema.setProvince(province);
-            cinema.setLocation(tvArea.getText().toString());
+            cinema.setLocation(location);
             cinemaListener.saveCinema(cinema);
             editText.setText("");
             tvArea.setText("");
@@ -93,6 +94,7 @@ public class AddCinemasFragment extends BaseFragment {
         });
         findViewById(R.id.activity_dialog_cancel).setOnClickListener(v -> {
             cinemaListener.cancelAddCinema();
+
 
         });
     }

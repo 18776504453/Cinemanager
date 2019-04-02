@@ -61,8 +61,12 @@ public class OrderFragment extends BaseFragment {
                        .setTitle("删除确认")
                        .setMessage("要删除订单吗？")
                        .setNegativeButton("取消", null)
-                       .setPositiveButton("确认", (dialog, which) ->
-                               adapter.remove(order)).show());
+                       .setPositiveButton("确认", (dialog, which) ->{
+                           adapter.remove(order);
+                           isDelete=false;
+                       }).show());
+               int visible=isDelete?View.VISIBLE:View.GONE;
+               btn.setVisibility(visible);
                holder.getConvertView().setOnTouchListener(new View.OnTouchListener() {
                    @Override
                    public boolean onTouch(View v, MotionEvent event) {
@@ -109,6 +113,9 @@ public class OrderFragment extends BaseFragment {
            }
        };
         lv.setAdapter(adapter);
+        if (order!=null){
+            save(order);
+        }
     }
     private void clickOrder(Order order) {
         Cinema cinema=CinemaFactory.getInstance().getById(order.getCinemaId().toString());
