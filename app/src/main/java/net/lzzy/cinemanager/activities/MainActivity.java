@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SearchView search;
     private SparseArray<String> titleArray = new SparseArray<>();
     private SparseArray<Fragment> fragmentArray = new SparseArray<>();
-    public static final String STATION_ID = "cinemaId";
+    public static final String CINEMA_ID = "cinemaId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Fragment cinemasFragment=fragmentArray.get(R.id.bar_see_cinema);
         FragmentTransaction transaction=manager.beginTransaction();
         if (cinemasFragment==null){
-            cinemasFragment=new CinemasFragment(cinema);
+            cinemasFragment=CinemasFragment.newinstance(cinema);
             fragmentArray.put(R.id.bar_see_cinema,cinemasFragment);
             transaction.add(R.id.fragment_container,cinemasFragment);
         }else {
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Fragment ordersFragment=fragmentArray.get(R.id.bar_order);
         FragmentTransaction transaction=manager.beginTransaction();
         if (ordersFragment==null){
-            ordersFragment=new OrderFragment(order);
+            ordersFragment= OrderFragment.newinstance(order);
             fragmentArray.put(R.id.bar_order,ordersFragment);
             transaction.add(R.id.fragment_container,ordersFragment);
         }else {
@@ -217,8 +217,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onCinemaSelected(String cinemaId) {
-        Intent intent = new Intent(MainActivity.this, CinemaOrdersActivity.class);
-        intent.putExtra(STATION_ID, cinemaId);
+        Intent intent = new Intent(this, CinemaOrdersActivity.class);
+        intent.putExtra(CINEMA_ID, cinemaId);
         startActivity(intent);
     }
 }

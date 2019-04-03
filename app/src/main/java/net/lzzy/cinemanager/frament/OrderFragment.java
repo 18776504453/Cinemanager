@@ -1,6 +1,7 @@
 package net.lzzy.cinemanager.frament;
 
 
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -29,6 +30,7 @@ import java.util.List;
  */
 public class OrderFragment extends BaseFragment {
     public static final int MNT_DISTANCE = 100;
+    public static final String ORDER = "order";
     private List<Order> orders;
     private OrderFactory factory;
     private GenericAdapter<Order> adapter;
@@ -36,15 +38,17 @@ public class OrderFragment extends BaseFragment {
     float touchX1;
     float touchX2;
     boolean isDelete = false;
-    public OrderFragment() {
-    }
-
-    public OrderFragment(Order order) {
-        this.order = order;
+    public static OrderFragment newinstance(Order order){
+        OrderFragment fragment=new OrderFragment();
+        Bundle args=new Bundle();
+        args.putParcelable(ORDER,order);
+        //putParcelable 序列化,所有的完成都是在内存进行
+        fragment.setArguments(args);
+        return fragment;
     }
     @Override
     protected void populate() {
-        ListView lv=findViewById(R.id.activity_cinema_content_lv);
+        ListView lv=findViewById(R.id.fragment_cinema_content_lv);
         View empty=findViewById(R.id.item_zero);
         lv.setEmptyView(empty);
         factory=OrderFactory.getInstance();

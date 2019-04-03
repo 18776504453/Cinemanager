@@ -1,13 +1,13 @@
 package net.lzzy.cinemanager.frament;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -17,10 +17,7 @@ import net.lzzy.cinemanager.models.CinemaFactory;
 import net.lzzy.sqllib.GenericAdapter;
 import net.lzzy.sqllib.ViewHolder;
 
-import java.security.PublicKey;
 import java.util.List;
-
-import static net.lzzy.cinemanager.frament.OrderFragment.MNT_DISTANCE;
 
 /**
  * @author lzzy_gxy
@@ -29,6 +26,7 @@ import static net.lzzy.cinemanager.frament.OrderFragment.MNT_DISTANCE;
  */
 public class CinemasFragment extends BaseFragment {
     public static final int MNT_DISTANCE = 100;
+    public static final String CINEMA = "cinema";
     private List<Cinema> cinemas;
     private CinemaFactory factory;
     private GenericAdapter<Cinema> adapter;
@@ -38,17 +36,19 @@ public class CinemasFragment extends BaseFragment {
     float touchX2;
     boolean isDelete = false;
 
-    public CinemasFragment() {
-    }
-
-    public CinemasFragment(Cinema cinema) {
-        this.cinema = cinema;
-    }
+  public static CinemasFragment newinstance(Cinema cinema){
+      CinemasFragment fragment=new CinemasFragment();
+      Bundle args=new Bundle();
+      args.putParcelable(CINEMA,cinema);
+      //putParcelable 序列化,所有的完成都是在内存进行
+      fragment.setArguments(args);
+      return fragment;
+  }
 
     @Override
     protected void populate() {
 
-        ListView lv = findViewById(R.id.activity_cinema_content_lv);
+        ListView lv = findViewById(R.id.fragment_cinema_content_lv);
         View empty = findViewById(R.id.item_zero);
         lv.setEmptyView(empty);
         factory = CinemaFactory.getInstance();
@@ -58,7 +58,7 @@ public class CinemasFragment extends BaseFragment {
             public void populate(ViewHolder holder, Cinema cinema) {
                 holder.setTextView(R.id.activity_cinema_item_name, cinema.getName())
                         .setTextView(R.id.activity_cinema_item_area, cinema.getLocation());
-                Button btn = holder.getView(R.id.activity_cinema_btn);
+               /* Button btn = holder.getView(R.id.activity_cinema_btn);
                 btn.setOnClickListener(v -> new AlertDialog.Builder(getActivity())
                         .setTitle("删除确认")
                         .setMessage("要删除订单吗？")
@@ -103,7 +103,7 @@ public class CinemasFragment extends BaseFragment {
                     }
 
 
-                });
+                });*/
             }
 
             @Override

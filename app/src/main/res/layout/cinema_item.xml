@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    android:layout_margin="10dp"
     android:orientation="horizontal"
     android:gravity="center_vertical">
 <LinearLayout
@@ -14,12 +14,15 @@
         android:id="@+id/activity_cinema_item_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="5dp"
         android:text="万达影城"
+        android:textColor="@color/liji_c_blue"
         android:textSize="18dp" />
     <TextView
         android:id="@+id/activity_cinema_item_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="right"
         android:text="广西柳州城中区"
         android:textSize="15dp" />
 </LinearLayout>
